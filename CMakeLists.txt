@@ -199,9 +199,17 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 # ---------------------------------------------------------------------------
 # Install and exports
 # ---------------------------------------------------------------------------
+include(CMakePackageConfigHelpers)
+
+configure_package_config_file(CeleroConfig.cmake.in cmake/CeleroConfig.cmake
+  INSTALL_DESTINATION lib/cmake/Celero)
+
+write_basic_package_version_file(cmake/CeleroConfigVersion.cmake
+  VERSION       2.6.0
+  COMPATIBILITY SameMajorVersion)
 
 install(TARGETS ${PROJECT_NAME}
-  EXPORT ${PROJECT_NAME}-target
+  EXPORT              CeleroTargets
   RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
   LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
   ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/static
@@ -210,13 +218,22 @@ install(TARGETS ${PROJECT_NAME}
 install(DIRECTORY include DESTINATION ${CMAKE_INSTALL_PREFIX})
 
 # export to be used from install location
-install(EXPORT ${PROJECT_NAME}-target
-  DESTINATION ${CMAKE_INSTALL_PREFIX}/share
+install(EXPORT CeleroTargets
+  FILE        CeleroTargets.cmake
+  NAMESPACE   Celero::
+  DESTINATION lib/cmake/Celero
+)
+
+# install the config file
+install(
+  FILES       ${CMAKE_CURRENT_BINARY_DIR}/cmake/CeleroConfig.cmake
+              ${CMAKE_CURRENT_BINARY_DIR}/cmake/CeleroConfigVersion.cmake
+  DESTINATION lib/cmake/Celero
 )
 
 # export to be used from build directory
-export(EXPORT ${PROJECT_NAME}-target
-  FILE ${PROJECT_NAME}-target.cmake
+export(EXPORT CeleroTargets
+  FILE CeleroTargets.cmake
 )
 
 if(CELERO_ENABLE_FOLDERS)
