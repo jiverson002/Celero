@@ -316,6 +316,7 @@ namespace celero
 			{
 				std::cout << PrintColumn(udmValues.at(fieldName), 2, this->columnWidths[i + PrintConstants::NumberOfColumns]);
 			}
+			std::cout << " | ";
 		}
 
 		std::cout << "\n";
